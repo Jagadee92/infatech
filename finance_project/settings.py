@@ -15,11 +15,11 @@ ALLOWED_HOSTS = ['*']
 # Then set USE_SQLITE = False and fill the MySQL values below.
 USE_SQLITE = False
 
-MYSQL_DATABASE = "financ_db"
-MYSQL_USER = "root"
-MYSQL_PASSWORD = "Jagadeeswar@92"  # put your MySQL password here
-MYSQL_HOST = "127.0.0.1"
-MYSQL_PORT = "3306"
+MYSQL_DATABASE = os.getenv("DB_NAME")
+MYSQL_USER = os.getenv("DB_USER")
+MYSQL_PASSWORD = os.getenv("DB_PASSWORD")
+MYSQL_HOST = os.getenv("DB_HOST")
+MYSQL_PORT = os.getenv("DB_PORT")
 # ---------------------------------------------------------------------------
 
 INSTALLED_APPS = [
