@@ -60,7 +60,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "gunicorn finance_project.wsgi:application"
+WSGI_APPLICATION = "finance_project.wsgi:application"
 
 if USE_SQLITE:
     DATABASES = {
@@ -75,14 +75,14 @@ else:
     pymysql.install_as_MySQLdb()
     DATABASES = {
         "default": {
-            "ENGINE": "django.db.backends.mysql",
-            "NAME": 'financ_db',
-            "USER": 'root',
-            "PASSWORD": 'Jagadeeswar@92',
-            "HOST": 'localhost',
-            "PORT": '3306',
-            "OPTIONS": {
-                "charset": "utf8mb4",
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": os.environ.get("DB_NAME", "fint_55ag"),
+            "USER": os.environ.get("DB_USER", "fint_55ag_user"),
+            "PASSWORD": os.environ.get("DB_PASSWORD", "hIgTuvgIM7lu5ARfHCRRLXAKmFZeCCCV"),
+            "HOST": os.environ.get("DB_HOST", "dpg-d9ub5onqj5pc739br0ig-a"),
+            "PORT": os.environ.get("DB_PORT", "5432"),
+        "   OPTIONS": {
+                 "charset": "utf8mb4",
             },
         }
     }
