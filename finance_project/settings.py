@@ -1,4 +1,3 @@
-from email.mime import application
 import os
 from pathlib import Path
 
@@ -7,7 +6,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "development-only-secret-key")
 DEBUG = os.getenv("DJANGO_DEBUG", "True").lower() == "true"
-ALLOWED_HOSTS = ['infatech-1.onrender.com', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
 
 # ---------------------------------------------------------------------------
 # Database settings
@@ -60,7 +59,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "finance_project.wsgi:application"
+WSGI_APPLICATION = "finance_project.wsgi.application"
 
 if USE_SQLITE:
     DATABASES = {
@@ -75,14 +74,14 @@ else:
     pymysql.install_as_MySQLdb()
     DATABASES = {
         "default": {
-            "ENGINE": "django.db.backends.postgresql",
-            "NAME": os.environ.get("DB_NAME", "fint_55ag"),
-            "USER": os.environ.get("DB_USER", "fint_55ag_user"),
-            "PASSWORD": os.environ.get("DB_PASSWORD", "hIgTuvgIM7lu5ARfHCRRLXAKmFZeCCCV"),
-            "HOST": os.environ.get("DB_HOST", "dpg-d9ub5onqj5pc739br0ig-a"),
-            "PORT": os.environ.get("DB_PORT", "5432"),
-        "   OPTIONS": {
-                 "charset": "utf8mb4",
+            "ENGINE": "django.db.backends.mysql",
+            "NAME": 'financ_db',
+            "USER": 'root',
+            "PASSWORD": 'Jagadeeswar@92',
+            "HOST": 'localhost',
+            "PORT": '3306',
+            "OPTIONS": {
+                "charset": "utf8mb4",
             },
         }
     }
