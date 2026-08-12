@@ -1,0 +1,100 @@
+{% if selected_company and active_tab == "company" %}
+
+<section class="record-details">
+
+    <div class="record-header">
+
+        <div>
+            <span class="record-label">Company Record</span>
+
+            <h1>{{ selected_company.ticker }}</h1>
+
+            <p>{{ selected_company.docname }}</p>
+        </div>
+
+        <a
+            class="back-button"
+            href="{% url 'companies:peers' %}?tab=peers"
+        >
+            Back to Records
+        </a>
+
+    </div>
+
+    <div class="details-grid">
+
+        <div class="detail-item">
+            <span>Ticker</span>
+            <strong>{{ selected_company.ticker }}</strong>
+        </div>
+
+        <div class="detail-item">
+            <span>Document Name</span>
+            <strong>{{ selected_company.docname }}</strong>
+        </div>
+
+        <div class="detail-item">
+            <span>Document ID</span>
+            <strong>{{ selected_company.docid }}</strong>
+        </div>
+
+        <div class="detail-item">
+            <span>Organization ID</span>
+            <strong>{{ selected_company.orgid }}</strong>
+        </div>
+
+        <div class="detail-item">
+            <span>Table Name</span>
+            <strong>{{ selected_company.tablename }}</strong>
+        </div>
+
+        <div class="detail-item">
+            <span>Financial Year End</span>
+            <strong>{{ selected_company.fyedate }}</strong>
+        </div>
+
+        <div class="detail-item">
+            <span>Page Number</span>
+            <strong>{{ selected_company.pageno }}</strong>
+        </div>
+
+        <div class="detail-item">
+            <span>Last Item</span>
+            <strong>{{ selected_company.lastitem }}</strong>
+        </div>
+
+        <div class="detail-item">
+            <span>Currency</span>
+            <strong>{{ selected_company.currency }}</strong>
+        </div>
+
+        <div class="detail-item">
+            <span>End Date</span>
+            <strong>{{ selected_company.enddate }}</strong>
+        </div>
+
+        <div class="detail-item">
+            <span>S.No.</span>
+            <strong>{{ selected_company.sno }}</strong>
+        </div>
+
+        <div class="detail-item">
+            <span>Note Number</span>
+            <strong>{{ selected_company.noteno }}</strong>
+        </div>
+
+        <div class="detail-item wide">
+            <span>Particulars</span>
+            <strong>{{ selected_company.particulars }}</strong>
+        </div>
+
+        <div class="detail-item">
+            <span>Amount</span>
+            <strong>{{ selected_company.amount|floatformat:2 }}</strong>
+        </div>
+
+    </div>
+
+</section>
+
+{% endif %}

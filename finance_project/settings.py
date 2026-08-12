@@ -13,11 +13,11 @@ ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
 # ---------------------------------------------------------------------------
 # Keep USE_SQLITE = True until MySQL is installed and the database is ready.
 # Then set USE_SQLITE = False and fill the MySQL values below.
-USE_SQLITE = True
+USE_SQLITE = False
 
-MYSQL_DATABASE = "finance_db"
+MYSQL_DATABASE = "financ_db"
 MYSQL_USER = "root"
-MYSQL_PASSWORD = ""  # put your MySQL password here
+MYSQL_PASSWORD = "Jagadeeswar@92"  # put your MySQL password here
 MYSQL_HOST = "127.0.0.1"
 MYSQL_PORT = "3306"
 # ---------------------------------------------------------------------------
@@ -75,11 +75,11 @@ else:
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.mysql",
-            "NAME": MYSQL_DATABASE,
-            "USER": MYSQL_USER,
-            "PASSWORD": MYSQL_PASSWORD,
-            "HOST": MYSQL_HOST,
-            "PORT": MYSQL_PORT,
+            "NAME": 'financ_db',
+            "USER": 'root',
+            "PASSWORD": 'Jagadeeswar@92',
+            "HOST": 'localhost',
+            "PORT": '3306',
             "OPTIONS": {
                 "charset": "utf8mb4",
             },

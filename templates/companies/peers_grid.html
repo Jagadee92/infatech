@@ -1,61 +1,142 @@
-<section class="card">
-    <div class="title-row">
+<section class="data-section">
+    <div class="section-header">
         <div>
-            <h2>Peers</h2>
+            <h2>Company Records</h2>
+
             {% if selected_company %}
-                <p>Companies from {{ selected_company.industry }}</p>
+                <p>Records for {{ selected_company.ticker }}</p>
             {% else %}
-                <p>Search a company to compare it with its peers</p>
+                <p>Browse company financial records</p>
             {% endif %}
         </div>
-        {% if selected_company %}
-            <a class="clear-link" href="{% url 'companies:peers' %}">Clear search</a>
-        {% endif %}
     </div>
 
     <div class="table-wrapper">
-        <table>
+        <table class="company-table">
             <thead>
                 <tr>
                     <th>S.No.</th>
-                    <th>Name</th>
-                    <th>CMP Rs.</th>
-                    <th>P/E</th>
-                    <th>Mar Cap Rs.Cr.</th>
-                    <th>Div Yld %</th>
-                    <th>NP Qtr Rs.Cr.</th>
-                    <th>Qtr Profit Var %</th>
-                    <th>Sales Qtr Rs.Cr.</th>
-                    <th>Qtr Sales Var %</th>
-                    <th>ROCE %</th>
+                    <th>Ticker</th>
+                    <th>Document</th>
+                    <th>Doc ID</th>
+                    <th>Org ID</th>
+                    <th>Particulars</th>
+                    <th>Amount</th>
+                    <th>Action</th>
                 </tr>
             </thead>
+
             <tbody>
                 {% for company in companies %}
-                    <tr{% if selected_company.id == company.id %} class="selected"{% endif %}>
-                        <td>{{ forloop.counter }}.</td>
+
+                    <tr
+                        {% if selected_company and selected_company.id == company.id %}
+                            class="selected"
+                        {% endif %}
+                    >
+
                         <td>
-                            <a class="company-link" href="{% url 'companies:peers' %}?company={{ company.ticker|urlencode }}">
-                                {{ company.name }}
-                            </a>
-                            <span class="ticker">{{ company.ticker }}</span>
+                            {{ forloop.counter0|add:page_obj.start_index }}.
                         </td>
-                        <td>{{ company.current_price|floatformat:2 }}</td>
-                        <td>{{ company.pe_ratio|floatformat:2 }}</td>
-                        <td>{{ company.market_cap|floatformat:2 }}</td>
-                        <td>{{ company.dividend_yield|floatformat:2 }}</td>
-                        <td>{{ company.quarterly_profit|floatformat:2 }}</td>
-                        <td>{{ company.profit_change|floatformat:2 }}</td>
-                        <td>{{ company.quarterly_sales|floatformat:2 }}</td>
-                        <td>{{ company.sales_change|floatformat:2 }}</td>
-                        <td>{{ company.roce|floatformat:2 }}</td>
+
+                        <td>
+                            <a
+                                class="ticker-link"
+                                href="{% url 'companies:peers' %}?record={{ company.id }}"
+                            >
+                                {{ company.ticker }}
+                            </a>
+                        </td>
+
+                        <td>
+                            {{ company.docname }}
+                        </td>
+
+                        <td>
+                            {{ company.docid }}
+                        </td>
+
+                        <td>
+                            {{ company.orgid }}
+                        </td>
+
+                        <td class="particulars-cell">
+                            {{ company.particulars }}
+                        </td>
+
+                        <td class="amount-cell">
+                            {{ company.amount|floatformat:2 }}
+                        </td>
+
+                        <td>
+                            <a
+                                class="view-button"
+                                href="{% url 'companies:peers' %}?record={{ company.id }}"
+                            >
+                                View
+                            </a>
+                        </td>
+
                     </tr>
+
                 {% empty %}
+
                     <tr>
-                        <td class="empty" colspan="11">No company data is available.</td>
+                        <td colspan="8" class="empty">
+                            No company data is available.
+                        </td>
                     </tr>
+
                 {% endfor %}
             </tbody>
         </table>
     </div>
+
+    {% if page_obj.paginator.num_pages > 1 %}
+
+        <div class="pagination">
+
+            {% if page_obj.has_previous %}
+
+                <a
+                    href="?page={{ page_obj.previous_page_number }}{% if query %}&company={{ query|urlencode }}{% endif %}{% if active_tab == 'peers' %}&tab=peers{% endif %}"
+                    class="page-button"
+                >
+                    Previous
+                </a>
+
+            {% else %}
+
+                <span class="page-button disabled">
+                    Previous
+                </span>
+
+            {% endif %}
+
+            <span class="page-info">
+                Page {{ page_obj.number }}
+                of
+                {{ page_obj.paginator.num_pages }}
+            </span>
+
+            {% if page_obj.has_next %}
+
+                <a
+                    href="?page={{ page_obj.next_page_number }}{% if query %}&company={{ query|urlencode }}{% endif %}{% if active_tab == 'peers' %}&tab=peers{% endif %}"
+                    class="page-button"
+                >
+                    Next
+                </a>
+
+            {% else %}
+
+                <span class="page-button disabled">
+                    Next
+                </span>
+
+            {% endif %}
+
+        </div>
+
+    {% endif %}
 </section>

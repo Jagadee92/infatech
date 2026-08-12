@@ -1,4 +1,3 @@
-// Shows matching company names below the search box while the user types.
 document.addEventListener("DOMContentLoaded", function () {
     var form = document.getElementById("search-form");
     var input = document.getElementById("company");
@@ -32,19 +31,21 @@ document.addEventListener("DOMContentLoaded", function () {
         if (index < 0) {
             index = items.length - 1;
         }
-        if (index > items.length - 1) {
+
+        if (index >= items.length) {
             index = 0;
         }
 
         items.forEach(function (item) {
             item.classList.remove("is-active");
         });
+
         items[index].classList.add("is-active");
         activeIndex = index;
     }
 
-    function choose(name) {
-        input.value = name;
+    function choose(value) {
+        input.value = value;
         showClearButton();
         closeBox();
         form.submit();
@@ -59,9 +60,18 @@ document.addEventListener("DOMContentLoaded", function () {
 
         results.forEach(function (company) {
             var option = document.createElement("button");
+
             option.type = "button";
             option.className = "suggestion";
-            option.textContent = company.name;
+
+            option.textContent =
+                company.name +
+                " | Ticker: " +
+                company.ticker +
+                " | Doc ID: " +
+                company.docid +
+                " | Org ID: " +
+                company.orgid;
 
             option.addEventListener("click", function () {
                 choose(company.name);
@@ -84,17 +94,28 @@ document.addEventListener("DOMContentLoaded", function () {
 
         fetch(url + "?q=" + encodeURIComponent(keyword))
             .then(function (response) {
+                if (!response.ok) {
+                    throw new Error("Search request failed");
+                }
+
                 return response.json();
             })
             .then(function (data) {
                 openBox(data.results);
+            })
+            .catch(function () {
+                closeBox();
             });
     }
 
     input.addEventListener("input", function () {
         showClearButton();
+
         clearTimeout(timer);
-        timer = setTimeout(loadSuggestions, 250);
+
+        timer = setTimeout(function () {
+            loadSuggestions();
+        }, 250);
     });
 
     input.addEventListener("keydown", function (event) {
@@ -115,7 +136,7 @@ document.addEventListener("DOMContentLoaded", function () {
         } else if (event.key === "ArrowUp") {
             event.preventDefault();
             highlight(activeIndex - 1);
-        } else if (event.key === "Enter" && activeIndex > -1) {
+        } else if (event.key === "Enter" && activeIndex >= 0) {
             event.preventDefault();
             choose(items[activeIndex].textContent);
         }
