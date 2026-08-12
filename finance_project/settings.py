@@ -1,3 +1,4 @@
+from email.mime import application
 import os
 from pathlib import Path
 
@@ -6,7 +7,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "development-only-secret-key")
 DEBUG = os.getenv("DJANGO_DEBUG", "True").lower() == "true"
-ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
+ALLOWED_HOSTS = ['infatech.onrender.com', 'localhost', '127.0.0.1']
 
 # ---------------------------------------------------------------------------
 # Database settings
@@ -59,7 +60,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "finance_project.wsgi.application"
+WSGI_APPLICATION = "gunicorn finance_project.wsgi:application"
 
 if USE_SQLITE:
     DATABASES = {
