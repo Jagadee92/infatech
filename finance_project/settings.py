@@ -7,7 +7,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "development-only-secret-key")
 DEBUG = os.getenv("DJANGO_DEBUG", "True").lower() == "true"
-ALLOWED_HOSTS = ['infatech.onrender.com', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['infatech-1.onrender.com', 'localhost', '127.0.0.1']
 
 # ---------------------------------------------------------------------------
 # Database settings
