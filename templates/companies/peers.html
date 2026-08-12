@@ -1,0 +1,137 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Company Peer Comparison</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <header class="site-header">
+        <a class="brand" href="{% url 'companies:peers' %}">Company<span>Peers</span></a>
+
+        <form class="search-form" id="search-form" method="get">
+            <div class="search-field">
+                <label class="sr-only" for="company">Search for a company</label>
+                <svg class="search-icon" viewBox="0 0 24 24" aria-hidden="true">
+                    <circle cx="11" cy="11" r="7"></circle>
+                    <line x1="16.5" y1="16.5" x2="21" y2="21"></line>
+                </svg>
+                <input
+                    id="company"
+                    name="company"
+                    type="text"
+                    value="{% if selected_company %}{{ selected_company.name }}{% else %}{{ query }}{% endif %}"
+                    placeholder="Search for a company"
+                    autocomplete="off"
+                    required
+                >
+                <button type="button" class="clear-button" id="clear-search" aria-label="Clear search">&times;</button>
+                <div
+                    class="suggestions"
+                    id="suggestions"
+                    data-url="{% url 'companies:search_suggestions' %}"
+                ></div>
+            </div>
+            <button type="submit" class="search-button">Search</button>
+        </form>
+    </header>
+
+    {% if selected_company %}
+        <nav class="tabs">
+            <div class="tabs-inner">
+                <a
+                    class="tab {% if active_tab == 'company' %}active{% endif %}"
+                    href="{% url 'companies:peers' %}?company={{ selected_company.ticker|urlencode }}"
+                >{{ selected_company.short_name }}</a>
+                <a
+                    class="tab {% if active_tab == 'peers' %}active{% endif %}"
+                    href="{% url 'companies:peers' %}?company={{ selected_company.ticker|urlencode }}&amp;tab=peers"
+                >Peers</a>
+            </div>
+        </nav>
+    {% endif %}
+
+    <main class="page">
+        {% if error_message %}
+            <section class="card empty-state">
+                <div class="message">{{ error_message }}</div>
+            </section>
+        {% elif not selected_company %}
+            {% include "companies/peers_grid.html" %}
+        {% elif active_tab == 'company' %}
+            <section class="card company-card">
+                <div class="company-head">
+                    <h1>{{ selected_company.name }}</h1>
+                    <div class="company-price">
+                        <span class="price">₹ {{ selected_company.current_price|floatformat:2 }}</span>
+                        <span class="change {% if selected_company.price_change < 0 %}down{% else %}up{% endif %}">
+                            {% if selected_company.price_change > 0 %}+{% endif %}{{ selected_company.price_change|floatformat:2 }}%
+                        </span>
+                        <span class="note">close price</span>
+                    </div>
+                </div>
+
+                <div class="company-links">
+                    {% if selected_company.website %}
+                        <a href="https://{{ selected_company.website }}" target="_blank" rel="noopener">
+                            {{ selected_company.website }}
+                        </a>
+                    {% endif %}
+                    {% if selected_company.bse_code %}
+                        <span>BSE: {{ selected_company.bse_code }}</span>
+                    {% endif %}
+                    {% if selected_company.nse_code %}
+                        <span>NSE: {{ selected_company.nse_code }}</span>
+                    {% endif %}
+                    <span>Industry: {{ selected_company.industry }}</span>
+                </div>
+
+                <div class="ratio-grid">
+                    <div class="ratio">
+                        <span>Market Cap</span>
+                        <strong>₹ {{ selected_company.market_cap|floatformat:2 }} Cr.</strong>
+                    </div>
+                    <div class="ratio">
+                        <span>Current Price</span>
+                        <strong>₹ {{ selected_company.current_price|floatformat:2 }}</strong>
+                    </div>
+                    <div class="ratio">
+                        <span>High / Low</span>
+                        <strong>₹ {{ selected_company.high_price|floatformat:0 }} / {{ selected_company.low_price|floatformat:0 }}</strong>
+                    </div>
+                    <div class="ratio">
+                        <span>Stock P/E</span>
+                        <strong>{{ selected_company.pe_ratio|floatformat:2 }}</strong>
+                    </div>
+                    <div class="ratio">
+                        <span>Book Value</span>
+                        <strong>₹ {{ selected_company.book_value|floatformat:2 }}</strong>
+                    </div>
+                    <div class="ratio">
+                        <span>Dividend Yield</span>
+                        <strong>{{ selected_company.dividend_yield|floatformat:2 }} %</strong>
+                    </div>
+                    <div class="ratio">
+                        <span>ROCE</span>
+                        <strong>{{ selected_company.roce|floatformat:2 }} %</strong>
+                    </div>
+                    <div class="ratio">
+                        <span>ROE</span>
+                        <strong>{{ selected_company.roe|floatformat:2 }} %</strong>
+                    </div>
+                    <div class="ratio">
+                        <span>Face Value</span>
+                        <strong>₹ {{ selected_company.face_value|floatformat:2 }}</strong>
+                    </div>
+                </div>
+            </section>
+        {% else %}
+            {% include "companies/peers_grid.html" %}
+        {% endif %}
+    </main>
+
+    <script src="{% static 'js/search.js' %}"></script>
+</body>
+</html>

@@ -1,0 +1,61 @@
+<section class="card">
+    <div class="title-row">
+        <div>
+            <h2>Peers</h2>
+            {% if selected_company %}
+                <p>Companies from {{ selected_company.industry }}</p>
+            {% else %}
+                <p>Search a company to compare it with its peers</p>
+            {% endif %}
+        </div>
+        {% if selected_company %}
+            <a class="clear-link" href="{% url 'companies:peers' %}">Clear search</a>
+        {% endif %}
+    </div>
+
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>S.No.</th>
+                    <th>Name</th>
+                    <th>CMP Rs.</th>
+                    <th>P/E</th>
+                    <th>Mar Cap Rs.Cr.</th>
+                    <th>Div Yld %</th>
+                    <th>NP Qtr Rs.Cr.</th>
+                    <th>Qtr Profit Var %</th>
+                    <th>Sales Qtr Rs.Cr.</th>
+                    <th>Qtr Sales Var %</th>
+                    <th>ROCE %</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for company in companies %}
+                    <tr{% if selected_company.id == company.id %} class="selected"{% endif %}>
+                        <td>{{ forloop.counter }}.</td>
+                        <td>
+                            <a class="company-link" href="{% url 'companies:peers' %}?company={{ company.ticker|urlencode }}">
+                                {{ company.name }}
+                            </a>
+                            <span class="ticker">{{ company.ticker }}</span>
+                        </td>
+                        <td>{{ company.current_price|floatformat:2 }}</td>
+                        <td>{{ company.pe_ratio|floatformat:2 }}</td>
+                        <td>{{ company.market_cap|floatformat:2 }}</td>
+                        <td>{{ company.dividend_yield|floatformat:2 }}</td>
+                        <td>{{ company.quarterly_profit|floatformat:2 }}</td>
+                        <td>{{ company.profit_change|floatformat:2 }}</td>
+                        <td>{{ company.quarterly_sales|floatformat:2 }}</td>
+                        <td>{{ company.sales_change|floatformat:2 }}</td>
+                        <td>{{ company.roce|floatformat:2 }}</td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td class="empty" colspan="11">No company data is available.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
