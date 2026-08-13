@@ -1,18 +1,28 @@
 <section class="data-section">
+
     <div class="section-header">
         <div>
+
             <h2>Company Records</h2>
 
             {% if selected_company %}
-                <p>Records for {{ selected_company.ticker }}</p>
+                <p>
+                    Records for {{ selected_company.ticker }}
+                </p>
             {% else %}
-                <p>Browse company financial records</p>
+                <p>
+                    Browse company financial records
+                </p>
             {% endif %}
+
         </div>
     </div>
 
+
     <div class="table-wrapper">
+
         <table class="company-table">
+
             <thead>
                 <tr>
                     <th>S.No.</th>
@@ -26,7 +36,9 @@
                 </tr>
             </thead>
 
+
             <tbody>
+
                 {% for company in companies %}
 
                     <tr
@@ -35,72 +47,114 @@
                         {% endif %}
                     >
 
+                        <!-- S.NO -->
                         <td>
                             {{ forloop.counter0|add:page_obj.start_index }}.
                         </td>
 
+
+                        <!-- TICKER -->
                         <td>
+
                             <a
                                 class="ticker-link"
                                 href="{% url 'companies:peers' %}?record={{ company.id }}"
                             >
-                                {{ company.ticker }}
+                                {{ company.ticker|default:"-" }}
                             </a>
+
                         </td>
 
+
+                        <!-- DOCUMENT -->
                         <td>
-                            {{ company.docname }}
+                            {{ company.docname|default:"-" }}
                         </td>
 
+
+                        <!-- DOCUMENT ID -->
                         <td>
-                            {{ company.docid }}
+                            {{ company.docid|default:"-" }}
                         </td>
 
+
+                        <!-- ORGANIZATION ID -->
                         <td>
-                            {{ company.orgid }}
+                            {{ company.orgid|default:"-" }}
                         </td>
 
+
+                        <!-- PARTICULARS -->
                         <td class="particulars-cell">
-                            {{ company.particulars }}
+                            {{ company.particulars|default:"-" }}
                         </td>
 
+
+                        <!-- AMOUNT -->
                         <td class="amount-cell">
-                            {{ company.amount|floatformat:2 }}
+
+                            {% if company.amount is not None %}
+                                {{ company.amount|floatformat:2 }}
+                            {% else %}
+                                -
+                            {% endif %}
+
                         </td>
 
+
+                        <!-- VIEW -->
                         <td>
+
                             <a
                                 class="view-button"
                                 href="{% url 'companies:peers' %}?record={{ company.id }}"
                             >
                                 View
                             </a>
+
                         </td>
 
                     </tr>
+
 
                 {% empty %}
 
                     <tr>
-                        <td colspan="8" class="empty">
+
+                        <td
+                            colspan="8"
+                            class="empty"
+                        >
                             No company data is available.
                         </td>
+
                     </tr>
 
                 {% endfor %}
+
             </tbody>
+
         </table>
+
     </div>
+
+
+    <!-- =====================================================
+         PAGINATION
+         ===================================================== -->
 
     {% if page_obj.paginator.num_pages > 1 %}
 
         <div class="pagination">
 
+
+            <!-- PREVIOUS -->
+
             {% if page_obj.has_previous %}
 
                 <a
-                    href="?page={{ page_obj.previous_page_number }}{% if query %}&company={{ query|urlencode }}{% endif %}{% if active_tab == 'peers' %}&tab=peers{% endif %}"
                     class="page-button"
+                    href="?page={{ page_obj.previous_page_number }}{% if query %}&company={{ query|urlencode }}{% endif %}{% if record_id %}&record={{ record_id }}{% endif %}{% if active_tab == 'peers' %}&tab=peers{% endif %}"
                 >
                     Previous
                 </a>
@@ -113,17 +167,27 @@
 
             {% endif %}
 
+
+            <!-- PAGE NUMBER -->
+
             <span class="page-info">
+
                 Page {{ page_obj.number }}
+
                 of
+
                 {{ page_obj.paginator.num_pages }}
+
             </span>
+
+
+            <!-- NEXT -->
 
             {% if page_obj.has_next %}
 
                 <a
-                    href="?page={{ page_obj.next_page_number }}{% if query %}&company={{ query|urlencode }}{% endif %}{% if active_tab == 'peers' %}&tab=peers{% endif %}"
                     class="page-button"
+                    href="?page={{ page_obj.next_page_number }}{% if query %}&company={{ query|urlencode }}{% endif %}{% if record_id %}&record={{ record_id }}{% endif %}{% if active_tab == 'peers' %}&tab=peers{% endif %}"
                 >
                     Next
                 </a>
@@ -139,4 +203,5 @@
         </div>
 
     {% endif %}
+
 </section>
